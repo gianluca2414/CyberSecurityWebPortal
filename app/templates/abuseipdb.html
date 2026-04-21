@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+  <p class="eyebrow">Tool 1</p>
+  <h1>Bulk AbuseIPDB</h1>
+  <p>Inserisci uno o più IP, uno per riga. Il backend li valida e interroga AbuseIPDB lato server.</p>
+
+  <form method="post" class="stack">
+    <textarea name="ips" rows="10" placeholder="8.8.8.8&#10;1.1.1.1&#10;185.220.101.1">{{ submitted_text }}</textarea>
+    <div>
+      <button class="button primary" type="submit">Analizza</button>
+    </div>
+  </form>
+</section>
+
+{% if error %}
+<section class="banner danger">{{ error }}</section>
+{% endif %}
+
+{% if payload %}
+  {% if payload.invalid %}
+  <section class="banner warning">
+    IP scartati perché non validi: {{ payload.invalid | join(', ') }}
+  </section>
+  {% endif %}
+
+  <section class="panel">
+    <h2>Risultati</h2>
+    <div class="table-wrapper">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>IP</th>
+            <th>Hostname</th>
+            <th>Country</th>
+            <th>Score</th>
+            <th>Domain</th>
+            <th>ISP</th>
+            <th>Tor</th>
+            <th>Reports</th>
+            <th>Last report</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for row in payload.results %}
+          <tr>
+            <td>{{ row.ip }}</td>
+            <td>{{ row.hostname }}</td>
+            <td>
+              {% if row.country_code != 'N/D' %}
+                <span class="flag-icon flag-icon-{{ row.country_code.lower() }}"></span>
+              {% endif %}
+              {{ row.country_code }}
+            </td>
+            <td>
+              <span class="score {{ row.score_color }}">
+                {{ row.abuse_score }}%
+              </span>
+            </td>
+            <td>{{ row.domain }}</td>
+            <td>{{ row.isp }}</td>
+            <td>{{ "Yes" if row.tor else "No" }}</td>
+            <td>{{ row.report_count }}</td>
+            <td>{{ row.last_report }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endif %}
+{% endblock %}

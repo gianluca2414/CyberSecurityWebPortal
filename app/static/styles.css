@@ -1,0 +1,301 @@
+:root {
+  --bg: #0b1020;
+  --panel: #141b2d;
+  --panel-2: #1a2236;
+  --text: #edf2ff;
+  --muted: #a9b4d0;
+  --primary: #53a4ff;
+  --primary-2: #2f7de0;
+  --danger: #ff7272;
+  --warning: #ffcf5a;
+  --border: #2a3552;
+  --success: #66d19e;
+  --score-very-low: #66d19e;
+  --score-low: #ffcf5a;
+  --score-mid: #ffab5a;
+  --score-high: #ff7272;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: linear-gradient(180deg, #0b1020 0%, #0f1629 100%); color: var(--text); }
+a { color: inherit; text-decoration: none; }
+code, pre, textarea, input { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+.container { width: min(1200px, calc(100% - 2rem)); margin: 0 auto; }
+.topbar { position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(11,16,32,0.8); border-bottom: 1px solid var(--border); z-index: 20; }
+.topbar-inner { display: flex; justify-content: space-between; align-items: center; min-height: 70px; gap: 1rem; }
+.brand { font-weight: 800; letter-spacing: 0.02em; }
+.nav { display: flex; gap: 1rem; flex-wrap: wrap; }
+.nav a { color: var(--muted); }
+.nav a:hover { color: var(--text); }
+.page-content { padding: 2rem 0 4rem; }
+
+.hero { display: grid; grid-template-columns: 2fr 1fr; gap: 1.2rem; align-items: stretch; margin-bottom: 1.2rem; }
+.grid.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; }
+.cards.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.cards.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.stack { display: grid; gap: 1rem; }
+
+.panel, .card { background: rgba(20, 27, 45, 0.95); border: 1px solid var(--border); border-radius: 18px; padding: 1.25rem; box-shadow: 0 12px 30px rgba(0,0,0,0.18); }
+.card.small { min-height: 160px; }
+.card-like { min-height: 100%; }
+.panel.compact { padding: 1rem 1.25rem; }
+.banner { margin: 1rem 0; padding: 1rem 1.2rem; border-radius: 14px; border: 1px solid var(--border); }
+.banner.warning { background: rgba(255, 207, 90, 0.12); color: #ffe6a1; }
+.banner.danger { background: rgba(255, 114, 114, 0.12); color: #ffd0d0; }
+
+.eyebrow { margin: 0 0 .5rem; text-transform: uppercase; font-size: .8rem; letter-spacing: .08em; color: var(--primary); }
+h1, h2, h3, h4 { margin-top: 0; }
+.lede { color: var(--muted); max-width: 70ch; }
+.clean-list { margin: 0; padding-left: 1.2rem; color: var(--muted); }
+.steps { color: var(--muted); }
+.hero-actions, .inline-form { display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; }
+.button { display: inline-flex; align-items: center; justify-content: center; padding: .8rem 1rem; border-radius: 12px; border: 1px solid var(--border); font-weight: 700; cursor: pointer; }
+.button.primary { background: linear-gradient(180deg, var(--primary), var(--primary-2)); color: white; }
+.button.secondary { background: transparent; color: var(--text); }
+input, textarea { width: 100%; background: rgba(10, 14, 26, .8); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: .9rem 1rem; }
+textarea { resize: vertical; }
+.table-wrapper { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: .8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-size: .9rem; }
+
+/* Score colors - nuovi colori per AbuseIPDB */
+.score { display: inline-flex; min-width: 72px; justify-content: center; padding: .35rem .65rem; border-radius: 999px; font-weight: 700; }
+.score-very-low { background: rgba(102, 209, 158, 0.18); color: #b6f4d5; }  /* Verde 0-5 */
+.score-low { background: rgba(255, 207, 90, 0.18); color: #fff0a1; }         /* Giallo 5-10 */
+.score-mid { background: rgba(255, 171, 90, 0.18); color: #ffd0a1; }          /* Arancione 10-40 */
+.score-high { background: rgba(255, 114, 114, 0.18); color: #ffb0b0; }        /* Rosso 40-100 */
+
+/* Legacy classes per compatibilità */
+.score.high { background: rgba(255, 114, 114, 0.18); color: #ffb0b0; }
+.score.mid { background: rgba(255, 171, 90, 0.18); color: #ffd0a1; }
+.score.low { background: rgba(255, 207, 90, 0.18); color: #fff0a1; }
+.score.clean { background: rgba(102, 209, 158, 0.18); color: #b6f4d5; }
+
+/* Flag icons - versione semplice con emoji */
+.flag-icon {
+  display: inline-block;
+  width: 1.2em;
+  height: 1em;
+  margin-right: 0.3em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Per bandiere useremo emoji (supporto universale) */
+.flag-icon::before {
+  content: "🏳️";
+}
+
+/* Mappa country code a emoji flags (i più comuni) */
+.flag-icon-af::before { content: "🇦🇫"; }
+.flag-icon-al::before { content: "🇦🇱"; }
+.flag-icon-dz::before { content: "🇩🇿"; }
+.flag-icon-ad::before { content: "🇦🇩"; }
+.flag-icon-ao::before { content: "🇦🇴"; }
+.flag-icon-ar::before { content: "🇦🇷"; }
+.flag-icon-am::before { content: "🇦🇲"; }
+.flag-icon-au::before { content: "🇦🇺"; }
+.flag-icon-at::before { content: "🇦🇹"; }
+.flag-icon-az::before { content: "🇦🇿"; }
+.flag-icon-bs::before { content: "🇧🇸"; }
+.flag-icon-bh::before { content: "🇧🇭"; }
+.flag-icon-bd::before { content: "🇧🇩"; }
+.flag-icon-by::before { content: "🇧🇾"; }
+.flag-icon-be::before { content: "🇧🇪"; }
+.flag-icon-bz::before { content: "🇧🇿"; }
+.flag-icon-bj::before { content: "🇧🇯"; }
+.flag-icon-bt::before { content: "🇧🇹"; }
+.flag-icon-bo::before { content: "🇧🇴"; }
+.flag-icon-ba::before { content: "🇧🇦"; }
+.flag-icon-bw::before { content: "🇧🇼"; }
+.flag-icon-br::before { content: "🇧🇷"; }
+.flag-icon-bn::before { content: "🇧🇳"; }
+.flag-icon-bg::before { content: "🇧🇬"; }
+.flag-icon-bf::before { content: "🇧🇫"; }
+.flag-icon-bi::before { content: "🇧🇮"; }
+.flag-icon-kh::before { content: "🇰🇭"; }
+.flag-icon-cm::before { content: "🇨🇲"; }
+.flag-icon-ca::before { content: "🇨🇦"; }
+.flag-icon-cv::before { content: "🇨🇻"; }
+.flag-icon-cf::before { content: "🇨🇫"; }
+.flag-icon-td::before { content: "🇹🇩"; }
+.flag-icon-cl::before { content: "🇨🇱"; }
+.flag-icon-cn::before { content: "🇨🇳"; }
+.flag-icon-co::before { content: "🇨🇴"; }
+.flag-icon-km::before { content: "🇰🇲"; }
+.flag-icon-cd::before { content: "🇨🇩"; }
+.flag-icon-cg::before { content: "🇨🇬"; }
+.flag-icon-cr::before { content: "🇨🇷"; }
+.flag-ci-hr::before { content: "🇭🇷"; }
+.flag-icon-cu::before { content: "🇨🇺"; }
+.flag-icon-cy::before { content: "🇨🇾"; }
+.flag-icon-cz::before { content: "🇨🇿"; }
+.flag-icon-dk::before { content: "🇩🇰"; }
+.flag-icon-dj::before { content: "🇩🇯"; }
+.flag-icon-dm::before { content: "🇩🇲"; }
+.flag-icon-do::before { content: "🇩🇴"; }
+.flag-icon-ec::before { content: "🇪🇨"; }
+.flag-icon-eg::before { content: "🇪🇬"; }
+.flag-icon-sv::before { content: "🇸🇻"; }
+.flag-icon-gq::before { content: "🇬🇶"; }
+.flag-icon-er::before { content: "🇪🇷"; }
+.flag-icon-ee::before { content: "🇪🇪"; }
+.flag-icon-et::before { content: "🇪🇹"; }
+.flag-icon-fj::before { content: "🇫🇯"; }
+.flag-icon-fi::before { content: "🇫🇮"; }
+.flag-icon-fr::before { content: "🇫🇷"; }
+.flag-icon-ga::before { content: "🇬🇦"; }
+.flag-icon-gm::before { content: "🇬🇲"; }
+.flag-icon-ge::before { content: "🇬🇪"; }
+.flag-icon-de::before { content: "🇩🇪"; }
+.flag-icon-gh::before { content: "🇬🇭"; }
+.flag-icon-gr::before { content: "🇬🇷"; }
+.flag-icon-gd::before { content: "🇬🇩"; }
+.flag-icon-gt::before { content: "🇬🇹"; }
+.flag-icon-gn::before { content: "🇬🇳"; }
+.flag-icon-gw::before { content: "🇬🇼"; }
+.flag-icon-gy::before { content: "🇬🇾"; }
+.flag-icon-ht::before { content: "🇭🇹"; }
+.flag-icon-hn::before { content: "🇭🇳"; }
+.flag-icon-hu::before { content: "🇭🇺"; }
+.flag-icon-is::before { content: "🇮🇸"; }
+.flag-icon-in::before { content: "🇮🇳"; }
+.flag-icon-id::before { content: "🇮🇩"; }
+.flag-icon-ir::before { content: "🇮🇷"; }
+.flag-icon-iq::before { content: "🇮🇶"; }
+.flag-icon-ie::before { content: "🇮🇪"; }
+.flag-icon-il::before { content: "🇮🇱"; }
+.flag-icon-it::before { content: "🇮🇹"; }
+.flag-icon-jm::before { content: "🇯🇲"; }
+.flag-icon-jp::before { content: "🇯🇵"; }
+.flag-icon-jo::before { content: "🇯🇴"; }
+.flag-icon-kz::before { content: "🇰🇿"; }
+.flag-icon-ke::before { content: "🇰🇪"; }
+.flag-icon-ki::before { content: "🇰🇮"; }
+.flag-icon-kp::before { content: "🇰🇵"; }
+.flag-icon-kr::before { content: "🇰🇷"; }
+.flag-icon-kw::before { content: "🇰🇼"; }
+.flag-icon-kg::before { content: "🇰🇬"; }
+.flag-icon-la::before { content: "🇱🇦"; }
+.flag-icon-lv::before { content: "🇱🇻"; }
+.flag-icon-lb::before { content: "🇱🇧"; }
+.flag-icon-ls::before { content: "🇱🇸"; }
+.flag-icon-lr::before { content: "🇱🇷"; }
+.flag-icon-ly::before { content: "🇱🇾"; }
+.flag-icon-li::before { content: "🇱🇮"; }
+.flag-icon-lt::before { content: "🇱🇹"; }
+.flag-icon-lu::before { content: "🇱🇺"; }
+.flag-icon-mg::before { content: "🇲🇬"; }
+.flag-icon-mw::before { content: "🇲🇼"; }
+.flag-icon-my::before { content: "🇲🇾"; }
+.flag-icon-mv::before { content: "🇲🇻"; }
+.flag-icon-ml::before { content: "🇲🇱"; }
+.flag-icon-mt::before { content: "🇲🇹"; }
+.flag-icon-mh::before { content: "🇲🇭"; }
+.flag-icon-mr::before { content: "🇲🇷"; }
+.flag-icon-mu::before { content: "🇲🇺"; }
+.flag-icon-mx::before { content: "🇲🇽"; }
+.flag-icon-fm::before { content: "🇫🇲"; }
+.flag-icon-md::before { content: "🇲🇩"; }
+.flag-icon-mc::before { content: "🇲🇨"; }
+.flag-icon-mn::before { content: "🇲🇳"; }
+.flag-icon-me::before { content: "🇲🇪"; }
+.flag-icon-ma::before { content: "🇲🇦"; }
+.flag-icon-mz::before { content: "🇲🇿"; }
+.flag-icon-mm::before { content: "🇲🇲"; }
+.flag-icon-na::before { content: "🇳🇦"; }
+.flag-icon-nr::before { content: "🇳🇷"; }
+.flag-icon-np::before { content: "🇳🇵"; }
+.flag-icon-nl::before { content: "🇳🇱"; }
+.flag-icon-nz::before { content: "🇳🇿"; }
+.flag-icon-ni::before { content: "🇳🇮"; }
+.flag-icon-ne::before { content: "🇳🇪"; }
+.flag-icon-ng::before { content: "🇳🇬"; }
+.flag-icon-nf::before { content: "🇳🇫"; }
+.flag-icon-mk::before { content: "🇲🇰"; }
+.flag-icon-no::before { content: "🇳🇴"; }
+.flag-icon-om::before { content: "🇴🇲"; }
+.flag-icon-pk::before { content: "🇵🇰"; }
+.flag-icon-pw::before { content: "🇵🇼"; }
+.flag-icon-ps::before { content: "🇵🇸"; }
+.flag-icon-pa::before { content: "🇵🇦"; }
+.flag-icon-pg::before { content: "🇵🇬"; }
+.flag-icon-py::before { content: "🇵🇾"; }
+.flag-icon-pe::before { content: "🇵🇪"; }
+.flag-icon-ph::before { content: "🇵🇭"; }
+.flag-icon-pl::before { content: "🇵🇱"; }
+.flag-icon-pt::before { content: "🇵🇹"; }
+.flag-icon-qa::before { content: "🇶🇦"; }
+.flag-icon-ro::before { content: "🇷🇴"; }
+.flag-icon-ru::before { content: "🇷🇺"; }
+.flag-icon-rw::before { content: "🇷🇼"; }
+.flag-icon-kn::before { content: "🇰🇳"; }
+.flag-icon-lc::before { content: "🇱🇨"; }
+.flag-icon-vc::before { content: "🇻🇨"; }
+.flag-icon-ws::before { content: "🇼🇸"; }
+.flag-icon-sm::before { content: "🇸🇲"; }
+.flag-icon-st::before { content: "🇸🇹"; }
+.flag-icon-sa::before { content: "🇸🇦"; }
+.flag-icon-sn::before { content: "🇸🇳"; }
+.flag-icon-rs::before { content: "🇷🇸"; }
+.flag-icon-sc::before { content: "🇸🇨"; }
+.flag-icon-sl::before { content: "🇸🇱"; }
+.flag-icon-sg::before { content: "🇸🇬"; }
+.flag-icon-sk::before { content: "🇸🇰"; }
+.flag-icon-si::before { content: "🇸🇮"; }
+.flag-icon-sb::before { content: "🇸🇧"; }
+.flag-icon-so::before { content: "🇸🇴"; }
+.flag-icon-za::before { content: "🇿🇦"; }
+.flag-icon-ss::before { content: "🇸🇸"; }
+.flag-icon-es::before { content: "🇪🇸"; }
+.flag-icon-lk::before { content: "🇱🇰"; }
+.flag-icon-sd::before { content: "🇸🇩"; }
+.flag-icon-sr::before { content: "🇸🇷"; }
+.flag-icon-sz::before { content: "🇸🇿"; }
+.flag-icon-se::before { content: "🇸🇪"; }
+.flag-icon-ch::before { content: "🇨🇭"; }
+.flag-icon-sy::before { content: "🇸🇾"; }
+.flag-icon-tw::before { content: "🇹🇼"; }
+.flag-icon-tj::before { content: "🇹🇯"; }
+.flag-icon-tz::before { content: "🇹🇿"; }
+.flag-icon-th::before { content: "🇹🇭"; }
+.flag-icon-tl::before { content: "🇹🇱"; }
+.flag-icon-tg::before { content: "🇹🇬"; }
+.flag-icon-to::before { content: "🇹🇴"; }
+.flag-icon-tt::before { content: "🇹🇹"; }
+.flag-icon-tn::before { content: "🇹🇳"; }
+.flag-icon-tr::before { content: "🇹🇷"; }
+.flag-icon-tm::before { content: "🇹🇲"; }
+.flag-icon-tv::before { content: "🇹🇻"; }
+.flag-icon-ug::before { content: "🇺🇬"; }
+.flag-icon-ua::before { content: "🇺🇦"; }
+.flag-icon-ae::before { content: "🇦🇪"; }
+.flag-icon-gb::before { content: "🇬🇧"; }
+.flag-icon-us::before { content: "🇺🇸"; }
+.flag-icon-uy::before { content: "🇺🇾"; }
+.flag-icon-uz::before { content: "🇺🇿"; }
+.flag-icon-vu::before { content: "🇻🇺"; }
+.flag-icon-va::before { content: "🇻🇦"; }
+.flag-icon-ve::before { content: "🇻🇪"; }
+.flag-icon-vn::before { content: "🇻🇳"; }
+.flag-icon-ye::before { content: "🇾🇪"; }
+.flag-icon-zm::before { content: "🇿🇲"; }
+.flag-icon-zw::before { content: "🇿🇼"; }
+
+.section-header { display: flex; justify-content: space-between; gap: 1rem; align-items: end; flex-wrap: wrap; margin-bottom: 1rem; }
+.catalog-section + .catalog-section { margin-top: 1rem; }
+.card-link { display: block; }
+.card-link .card:hover { border-color: var(--primary); transform: translateY(-2px); transition: .2s ease; }
+.kv-list { display: grid; gap: .75rem; }
+.kv-row { display: grid; grid-template-columns: 180px 1fr; gap: .75rem; padding-bottom: .65rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.kv-key { color: var(--muted); font-weight: 600; }
+.kv-value { word-break: break-word; }
+pre { margin: 0; white-space: pre-wrap; background: rgba(10, 14, 26, .6); border: 1px solid var(--border); padding: .75rem; border-radius: 12px; }
+
+@media (max-width: 900px) {
+  .hero, .grid.two, .cards.two, .cards.three, .investigation-grid { grid-template-columns: 1fr; }
+  .kv-row { grid-template-columns: 1fr; }
+}

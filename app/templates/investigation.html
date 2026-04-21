@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+  <p class="eyebrow">Tool 2</p>
+  <h1>IR Investigation</h1>
+  <p>Inserisci un IP o un dominio. Il portale consolida i risultati in una sola pagina.</p>
+
+  <form method="post" class="inline-form">
+    <input type="text" name="target" value="{{ target }}" placeholder="example.com o 8.8.8.8">
+    <button class="button primary" type="submit">Investiga</button>
+  </form>
+</section>
+
+{% if error %}
+<section class="banner danger">{{ error }}</section>
+{% endif %}
+
+{% if result %}
+<section class="grid two">
+  <article class="panel compact">
+    <h2>Summary</h2>
+    <ul class="clean-list">
+      <li><strong>Target:</strong> {{ result.target }}</li>
+      <li><strong>Tipo:</strong> {{ result.target_type }}</li>
+      <li><strong>IP risolto:</strong> {{ result.resolved_ip or 'N/D' }}</li>
+    </ul>
+  </article>
+
+  {% if result.warnings %}
+  <article class="panel compact">
+    <h2>Warnings</h2>
+    <ul class="clean-list">
+      {% for warning in result.warnings %}
+      <li>{{ warning }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+  {% endif %}
+</section>
+
+<section class="cards two investigation-grid">
+  {% for section_name, data in result.sections.items() %}
+  <article class="panel card-like">
+    <h3>{{ section_name }}</h3>
+    <div class="kv-list">
+      {% for key, value in data.items() %}
+        <div class="kv-row">
+          <span class="kv-key">{{ key.replace('_', ' ').title() }}</span>
+          <span class="kv-value">
+            {% if key == 'abuse_confidence_score' and value != 'N/D' %}
+              <span class="score {{ data.get('score_color', 'score-mid') if data.get('score_color') else '' }}">
+                {{ value }}%
+              </span>
+            {% elif key == 'country_code' and value != 'N/D' %}
+              <span class="flag-icon flag-icon-{{ value.lower() }}"></span>
+              {{ value }}
+              {% if data.get('country_name') and data.country_name != 'N/D' %}
+                ({{ data.country_name }})
+              {% endif %}
+            {% elif key == 'registrant_email' and value != 'N/D' %}
+              <a href="mailto:{{ value }}">{{ value }}</a>
+            {% elif value is iterable and value is not string and value is not mapping %}
+              {{ value | join(', ') if value else 'N/D' }}
+            {% elif value is mapping %}
+              <pre>{{ value }}</pre>
+            {% else %}
+              {{ value }}
+            {% endif %}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+{% endblock %}

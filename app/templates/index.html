@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Self-hosted cyber portal</p>
+    <h1>Unifica i tuoi script OSINT / IR in una sola GUI web</h1>
+    <p class="lede">
+      Questo starter ti dà un portale Python deployabile su Proxmox, con moduli integrati, catalogo di tool per categorie,
+      e struttura pronta per aggiungere nuovi provider senza rifare tutto da zero.
+    </p>
+    <div class="hero-actions">
+      <a class="button primary" href="/tools/abuseipdb">Apri Bulk AbuseIPDB</a>
+      <a class="button secondary" href="/tools/investigation">Apri Investigation</a>
+    </div>
+  </div>
+  <div class="panel compact">
+    <h3>Cosa include</h3>
+    <ul class="clean-list">
+      <li>Bulk lookup AbuseIPDB per liste di IP</li>
+      <li>Investigazione singola IP/dominio multi-provider</li>
+      <li>Catalogo tool categorizzato con link rapidi</li>
+      <li>Dockerfile e docker-compose pronti</li>
+      <li>Gestione chiavi via variabili d'ambiente</li>
+    </ul>
+  </div>
+</section>
+
+<section class="grid two">
+  <article class="panel">
+    <h2>Moduli integrati</h2>
+    <div class="cards two">
+      <a class="card-link" href="/tools/abuseipdb">
+        <div class="card">
+          <h3>Bulk AbuseIPDB</h3>
+          <p>Incolli una lista di IP, ottieni score, country, ISP, domain, hostname, report count e ultimo report.</p>
+        </div>
+      </a>
+      <a class="card-link" href="/tools/investigation">
+        <div class="card">
+          <h3>IR Investigation</h3>
+          <p>Input singolo IP o dominio con risultati consolidati da AbuseIPDB, Shodan, OTX, VirusTotal e WHOIS.</p>
+        </div>
+      </a>
+    </div>
+  </article>
+
+  <article class="panel">
+    <h2>Come estenderlo</h2>
+    <ol class="steps">
+      <li>Crea un nuovo modulo in <code>app/services/</code>.</li>
+      <li>Aggiungi route e template dedicati oppure aggancialo all'investigation unificata.</li>
+      <li>Inserisci la chiave in <code>.env</code>.</li>
+      <li>Aggiungi il tool al catalogo in <code>catalog.py</code>.</li>
+    </ol>
+  </article>
+</section>
+
+<section class="panel">
+  <div class="section-header">
+    <div>
+      <p class="eyebrow">Catalogo</p>
+      <h2>Tool categorizzati</h2>
+    </div>
+    <form method="get" action="/" class="inline-form">
+      <input type="text" name="q" value="{{ catalog_query }}" placeholder="IP, dominio o URL per generare link rapidi">
+      <button class="button secondary" type="submit">Aggiorna link</button>
+    </form>
+  </div>
+
+  {% for category in catalog %}
+    <section class="catalog-section">
+      <h3>{{ category.category }}</h3>
+      <div class="cards three">
+        {% for item in category["items"] %}
+          <a class="card-link" href="{{ item.href }}" target="_blank" rel="noreferrer noopener">
+            <div class="card small">
+              <h4>{{ item.name }}</h4>
+              <p>{{ item.description }}</p>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
+</section>
+{% endblock %}

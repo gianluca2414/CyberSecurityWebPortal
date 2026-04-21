@@ -1,0 +1,9 @@
+services:
+  cybersec-portal:
+    build: .
+    container_name: cybersec-portal
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"

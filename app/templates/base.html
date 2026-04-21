@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ app_title }}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="/">{{ app_title }}</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/tools/abuseipdb">Bulk AbuseIPDB</a>
+        <a href="/tools/investigation">IR Investigation</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-content">
+    {% if not has_abuseipdb or not has_vt or not has_shodan or not has_otx %}
+      <section class="banner warning">
+        <strong>Nota:</strong> alcune API key non sono configurate. Il portale resta funzionante, ma i moduli senza chiave mostreranno un warning invece dei risultati.
+      </section>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
