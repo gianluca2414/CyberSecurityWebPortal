@@ -1,30 +1,35 @@
 # CyberSec Portal
 
-Portale self-hosted per riunire i tuoi script di cyber security in una GUI web unica.
+OnPremise portal to organize the most used cybersecurity tools in a single solution.
 
-## Cosa fa
+## What is
 
-Questa base progetto converte i tuoi script locali in un piccolo portale web con:
+Web portal with:
 
-- **Bulk AbuseIPDB**: incolli una lista di IP e ottieni risultati tabellari.
-- **IR Investigation**: investigazione singola IP/dominio con AbuseIPDB, Shodan, AlienVault OTX, VirusTotal e WHOIS.
-- **Catalogo tool**: lista di tool categorizzati con link rapidi per IP, URL e domini.
-- **Deploy semplice**: `docker compose up -d`.
+- **Bulk AbuseIPDB**: you can paste a list of IPs and you obtain abuseIPDB score and result for all of them in a singe time
+- **IR Investigation**: IP/domain OSINT intelligence and information retrieval to gather a first context and important information about a host or a server. With usage of AbuseIPDB, Shodan, AlienVault OTX, VirusTotal and WHOIS. All the information are grouped and displayed in a single page.
+- **Tool list**: URL-redirect to most famous cybersecurity tools for extra information and support
+- **Simple Deploy**: Adjust the deploy script with your username and machine name to deploy to a remote host; for docker, simple dockefile to bring up the project: `docker compose up -d`.
+Use an .env file or set up variables to commuicate with external systems
 
-## Perché ti consiglio VM invece di LXC
+## API Calls variable 
+All tool do not need to pay to use them. Just register on the relative websites and get your personal API key.
+Once you have the API key, you either use a .env file or you set env variable.
 
-Su Proxmox puoi farlo in entrambi i modi, ma per **Docker** e manutenzione semplice io ti consiglio una **VM Debian/Ubuntu**:
+ABUSEIPDB_API_KEY
+VIRUSTOTAL_API_KEY
+SHODAN_API_KEY
+ALIENVAULT_OTX_API_KEY
+URLSCAN_API_KEY
 
-- meno attriti con nesting, AppArmor e privilegi;
-- troubleshooting più facile;
-- isolamento migliore;
-- comportamento più prevedibile quando aggiungerai altri container o reverse proxy.
 
-### Se vuoi comunque usare un LXC
+## Infrastructure
+You can deploy the tool wherever you want, just need Docker. I personally use a LXC container in a Proxmox environment. 
+Low resource demanding (about 1 core and 500MiB RAM are enough on a LXC container)
+No storage needed (for the moment).
 
-Si può fare, ma è più delicato. In particolare Docker in LXC richiede configurazioni aggiuntive come **nesting** e, per container unprivileged, anche **keyctl** nelle opzioni del container Proxmox. Inoltre Proxmox segnala che il nested containerization dentro LXC ha avuto issue note, quindi non è la strada più lineare se vuoi una base stabile per il tuo portale. citeturn899587search2turn899587search7turn899587search0
 
-## Struttura
+## Code Structure
 
 ```text
 app/
@@ -41,23 +46,23 @@ docker-compose.yml
 .env.example
 ```
 
-## Setup rapido
+## Fast setup
 
-1. Copia il progetto sulla VM.
-2. Duplica `.env.example` in `.env`.
-3. Inserisci le tue API key.
-4. Avvia:
+1. Clone and copy the folder on your machine
+2. Change `env.example` in `.env`.
+3. Set up API keys
+4. Start:
 
 ```bash
-cp .env.example .env
-nano .env
-docker compose up -d --build
+docker compose up --build -d
 ```
 
-Poi apri:
+The web page can be accessed on:
 
 ```text
 http://IP-DELLA-VM:8000
+or 
+http://localhost:8000
 ```
 
 ## Esempio `.env`
@@ -75,35 +80,22 @@ ALIENVAULT_OTX_API_KEY=...
 URLSCAN_API_KEY=...
 ```
 
-## Hardening consigliato
+## Hardening suggestion
 
-Se lo esponi fuori dalla LAN, non pubblicarlo “nudo” su Internet.
+If Exposed, you should not directly expose this service.
+Remember always to isolate your environment (container / VM / sandbox) AND isolate your network from the public internet (use a reverse proxy, use a firewall)
 
-Minimo consigliato:
-
-- reverse proxy davanti;
+Some suggestions: 
+- reverse proxy;
 - HTTPS;
-- autenticazione (Authelia, OAuth2 Proxy, basic auth su reverse proxy, oppure VPN/Tailscale);
 - fail2ban / rate limiting;
-- backup di `.env` e compose;
-- logging separato.
 
-## Come aggiungere nuovi moduli
+## How to add new modules
 
-### Esempio: URLScan dedicato
+### Example: URLScan
 
-1. crea `app/services/urlscan.py`;
-2. aggiungi una route in `app/main.py`;
-3. crea `templates/urlscan.html`;
-4. aggiungi la voce al catalogo;
-5. collega la chiave in `.env`.
-
-## Come mappano i tuoi script originali
-
-- `checkAbuseIP.py` esponeva già una funzione riutilizzabile `call_api(ips)` per una lista IP; qui è stata trasformata in un servizio web lato server. fileciteturn1file0
-- `main.py` era una GUI Tkinter per il bulk AbuseIPDB; la stessa logica è stata portata su una pagina web con tabella e score colorato. fileciteturn1file2
-- `ir_investigations.py` già univa AbuseIPDB, Shodan, OTX, WHOIS e VirusTotal; nel portale è diventato il modulo “IR Investigation”. fileciteturn1file1
-
-## Nota importante sulle API key
-
-Nel file `ir_investigations.py` che hai caricato ci sono chiavi hardcoded nel sorgente. Nel progetto nuovo le ho spostate in variabili d’ambiente. Ti consiglio di **revocare/ruotare** quelle chiavi e sostituirle con chiavi nuove. fileciteturn1file1
+1. create `app/services/urlscan.py`;
+2. add a route in `app/main.py`;
+3. create `templates/urlscan.html`;
+4. add entry to catalogo;
+5. create a new API key and set it up in .env
